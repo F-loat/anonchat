@@ -14,6 +14,7 @@
         <img v-else class="headimg" :src="`/img/${headimg}_f.jpg`"  />
         <div class="message">{{message.content}}</div>
       </div>
+      <div class="blank"></div>
     </div>
     <form class="form">
       <input class="input" v-model="chat.input"/>
@@ -86,6 +87,7 @@ export default {
           sender: this.partner,
           content: data
         })
+        this.scrollToBottom()
       })
       socket.on('end', this.reset)
       socket.on('disconnect', () => {
@@ -114,6 +116,10 @@ export default {
         content: chat.input
       })
       chat.input = ''
+      this.scrollToBottom()
+    },
+    scrollToBottom () {
+      document.querySelector('.blank').scrollIntoView()
     },
     countDown () {
       const { timer } = this
@@ -143,27 +149,42 @@ html, body {
   text-align: center;
   color: #2c3e50;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.time {
+  background-color: #f1f3f5;
+  color: #ffe411;
+  font-size: 120px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: -1;
 }
 
 .header {
   background-color: #03a9f4;
   color: #fff;
-  width: 100%;
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 .list {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0 10px;
+  flex: 1;
   line-height: 1.5;
-  padding-top: 10px;
-  padding-bottom: 60px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: scroll;
 }
 .item {
   display: flex;
@@ -188,28 +209,14 @@ html, body {
   text-align: left;
   background-color: rgba(255, 255, 255, .7)
 }
-
-.time {
-  background-color: #f1f3f5;
-  color: #ffe411;
-  font-size: 120px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: -1;
+.blank {
+  width: 100%;
+  height: 60px;
 }
 
 .form {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100vw;
-  min-height: 54px;
+  height: 54px;
   display: flex;
   background-color: #fff;
   border-top: 1px solid #d8d8d8;
