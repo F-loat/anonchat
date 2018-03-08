@@ -48,5 +48,8 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     io.emit('count', io.eio.clientsCount)
+    const index = loners.findIndex(loner => loner.id === socket.id)
+    if (index === -1) return
+    loners.splice(index, 1)
   })
 })
